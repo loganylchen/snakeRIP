@@ -1,0 +1,2 @@
+params:
+  macs2: " -f BAM -g hs -q 0.05 -B –call-summits –keep-dup auto –nomodel –extsize 150 "
