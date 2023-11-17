@@ -77,21 +77,23 @@ def get_sra(wildcards):
     return samples.loc[wildcards.sample].loc['raw_data']
 
 def get_final_output():
-    contrasts = config['diffexp']['contrasts']
-    subclasses = samples.loc[:,config['diffexp']['subclass']].unique()
-    final_output = expand("results/star/{sample.sample_name}/ReadsPerGene.out.tab",sample=samples.itertuples())
-    final_output += expand("results/hamr/{sample.sample_name}/hamr.mods.txt",sample=samples.itertuples())
-    final_output += expand('results/modtect/{sample.sample_name}/modtect.combined.txt',sample=samples.itertuples())
-    final_output.append("results/deseq2/count_matrix.rds")
-    final_output.append("results/counts/count_matrix.tidy.featureCounts")
-    final_output.append("results/wgcna/wgcna.rds")
-    for key in contrasts:
-        for subclass in subclasses:
-            final_output.append(f"results/diffexp/{key}/{subclass}.diffexp.tsv")
-            final_output.append(directory(f"results/enrichment/{key}_{subclass}"))
-            final_output.append(f"results/visualization/Volcano.{key}_{subclass}.diffexp.pdf")
-            final_output.append(f"results/visualization/Volcano.{key}_{subclass}.diffexp.png")
-    final_output.append(f"results/visualization/PCA.pdf")
+    final_output = []
+    # contrasts = config['diffexp']['contrasts']
+    # subclasses = samples.loc[:,config['diffexp']['subclass']].unique()
+    # final_output = expand("results/star/{sample.sample_name}/ReadsPerGene.out.tab",sample=samples.itertuples())
+    # final_output += expand("results/hamr/{sample.sample_name}/hamr.mods.txt",sample=samples.itertuples())
+    # final_output += expand('results/modtect/{sample.sample_name}/modtect.combined.txt',sample=samples.itertuples())
+    # final_output.append("results/deseq2/count_matrix.rds")
+    # final_output.append("results/counts/count_matrix.tidy.featureCounts")
+    # final_output.append("results/wgcna/wgcna.rds")
+    # for key in contrasts:
+    #     for subclass in subclasses:
+    #         final_output.append(f"results/diffexp/{key}/{subclass}.diffexp.tsv")
+    #         final_output.append(directory(f"results/enrichment/{key}_{subclass}"))
+    #         final_output.append(f"results/visualization/Volcano.{key}_{subclass}.diffexp.pdf")
+    #         final_output.append(f"results/visualization/Volcano.{key}_{subclass}.diffexp.png")
+    # final_output.append(f"results/visualization/PCA.pdf")
     final_output.append("callpeak/MACS2_peaks.xls")
+    final_output.append("callpeak/MACS2_peaks_motif.fasta")
     # final_output.append("results/counts/all.symbol.tsv")
     return final_output
