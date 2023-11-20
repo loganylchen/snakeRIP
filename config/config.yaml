@@ -1,5 +1,7 @@
 samples: config/samples.csv
 
+tag: 'MOCK'
+
 threads:
   fastp: 12
   star: 12

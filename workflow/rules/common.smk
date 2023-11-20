@@ -48,6 +48,6 @@ def get_final_output():
     final_output = []
     final_output += expand("results/qc/{sample}/{sample}_rnaseq.pdf",sample=samples.index.to_list())
     final_output += expand("results/qc/{sample}/{sample}_bamqc.pdf",sample=samples.index.to_list())
-    final_output.append("callpeak/MACS2_peaks.xls")
-    final_output.append("callpeak/MACS2_peaks_motif.fasta")
+    final_output.append(f"callpeak/MACS2_{config['tag']}.peaks.xls")
+    final_output.append(f"callpeak/MACS2_{config['tag']}_peaks_motif.fasta")
     return final_output
