@@ -16,6 +16,6 @@ properties:
     description: tag in config
 required:
   - sample_name
-  - disease_status
+  - condition
   - raw_data
   - tag
