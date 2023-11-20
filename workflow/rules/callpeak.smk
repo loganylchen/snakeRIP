@@ -53,7 +53,9 @@ rule homer_annotatepeaks:
         mbed="callpeak/MACS2_peaks_motif.bed",
         # # optional output, implicitly sets the -mlogic flag, requires motif_files as input
         mlogic="callpeak/MACS2_peaks_motif.logic"
-    threads: 10
+    threads: config['threads']['homer']
+    benchmark:
+        "benchmarks/homer/callmotif.txt"
     params:
         mode="", # add tss, tts or rna mode and options here, i.e. "tss mm8"
         extra="-gid"  # optional params, see http://homer.ucsd.edu/homer/ngs/annotation.html

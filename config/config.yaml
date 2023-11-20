@@ -1,2 +1,19 @@
+samples: config/samples.csv
+
+threads:
+  fastp: 12
+  star: 12
+  homer: 12
+
+ref:
+  # Ensembl species name
+  species: homo_sapiens
+  # Ensembl release (make sure to take one where snpeff data is available, check 'snpEff databases' output)
+  release: 104
+  # Genome build
+  build: GRCh38
+
 params:
   macs2: " -f BAM -g hs -q 0.05 -B –call-summits –keep-dup auto –nomodel –extsize 150 "
+  fastp: "-c "
+  star: ""

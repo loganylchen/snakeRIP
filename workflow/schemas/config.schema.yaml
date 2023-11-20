@@ -1,0 +1,31 @@
+$schema: "http://json-schema.org/draft-06/schema#"
+
+description: snakemake configuration file
+
+type: object
+
+properties:
+  samples:
+    type: string
+
+  threads:
+    type: object
+    properties:
+      fastp:
+        type: integer
+      star:
+        type: integer
+
+  params:
+    type: object
+    properties:
+      fastp:
+        type: string
+      star:
+        type: string
+
+
+required:
+  - samples
+  - params
+  - threads

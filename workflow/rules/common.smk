@@ -14,6 +14,12 @@ validate(samples, schema="../schemas/samples.schema.yaml")
 
 
 
+rip_samples = samples.loc[samples['condition']=='RIP',:].index.to_list()
+input_samples = samples.loc[samples['condition']=='input',:].index.to_list()
+
+
+
+
 def check_raw_data(raw_data_string:str):
     fq1, fq2 = raw_data_string.split(',')
     return fq1,fq2
@@ -40,6 +46,8 @@ def get_sra(wildcards):
 
 def get_final_output():
     final_output = []
+    final_output += expand("results/qc/{sample}/{sample}_rnaseq.pdf",sample=samples.index.to_list())
+    final_output += expand("results/qc/{sample}/{sample}_bamqc.pdf",sample=samples.index.to_list())
     final_output.append("callpeak/MACS2_peaks.xls")
     final_output.append("callpeak/MACS2_peaks_motif.fasta")
     return final_output
