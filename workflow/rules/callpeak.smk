@@ -22,9 +22,9 @@ rule callpeak:
 rule homer_annotatepeaks:
     input:
         peaks=f"callpeak/MACS2_{config['tag']}_peaks.narrowPeak",
-        genome=config['reference']['genome'],
+        genome="resources/genome.fasta",
         # optional input files
-        gtf=config['reference']['gtf'], # implicitly sets the -gtf flag
+        gtf="resources/genome.gtf", # implicitly sets the -gtf flag
         # gene="", # implicitly sets the -gene flag for gene data file to add gene expression or other data types
         # motif_files="peaks_refs/motives.txt", # implicitly sets the -m flag
         # filter_motiv="", # implicitly sets the -fm flag
