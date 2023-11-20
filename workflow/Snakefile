@@ -29,7 +29,7 @@ include: "rules/fastqc.smk"
 include: "rules/bamqc.smk"
 
 include: "rules/align.smk"
-
+include: "rules/ref.smk"
 include: "rules/callpeak.smk"
 
 

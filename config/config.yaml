@@ -7,7 +7,7 @@ threads:
   star: 12
   homer: 12
 
-ref:
+reference:
   # Ensembl species name
   species: homo_sapiens
   # Ensembl release (make sure to take one where snpeff data is available, check 'snpEff databases' output)

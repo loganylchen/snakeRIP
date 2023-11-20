@@ -24,8 +24,24 @@ properties:
       star:
         type: string
 
+  reference:
+    type: object
+    properties:
+      species:
+        type: string
+      release:
+        type: integer
+      build:
+        type: string
+    required:
+      - species
+      - release
+      - build
+
+
 
 required:
   - samples
   - params
   - threads
+  - reference
