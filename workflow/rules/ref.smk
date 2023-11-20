@@ -4,10 +4,10 @@ rule get_genome:
     log:
         "logs/ref/get-genome.log",
     params:
-        species=config["ref"]["species"],
+        species=config["reference"]["species"],
         datatype="dna",
-        build=config["ref"]["build"],
-        release=config["ref"]["release"],
+        build=config["reference"]["build"],
+        release=config["reference"]["release"],
     cache: True
     benchmark:
         "benchmarks/get_genome.benchmark.txt"
@@ -19,10 +19,10 @@ rule get_annotation:
     output:
         "resources/genome.gtf",
     params:
-        species=config["ref"]["species"],
+        species=config["reference"]["species"],
         fmt="gtf",
-        build=config["ref"]["build"],
-        release=config["ref"]["release"],
+        build=config["reference"]["build"],
+        release=config["reference"]["release"],
         flavor="",
     cache: True
     log:
