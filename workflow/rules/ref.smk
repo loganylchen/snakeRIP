@@ -69,9 +69,7 @@ rule star_index:
         fasta='resources/genome.fasta',
         gtf='resources/genome.gtf'
     output:
-        directory("resources/star_genome"),
-        "resources/star_genome/SAindex",
-        "resources/star_genome/SA"
+        directory("resources/star_genome")
     threads: config['threads']['star']
     params:
         sjdb_overhang=100,
