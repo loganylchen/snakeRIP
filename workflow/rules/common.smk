@@ -10,6 +10,8 @@ samples = (
     .sort_index()
 )
 
+samples = samples.loc[samples['tag']==config['tag'],:]
+
 validate(samples, schema="../schemas/samples.schema.yaml")
 
 
