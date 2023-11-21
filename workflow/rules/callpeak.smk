@@ -3,7 +3,7 @@ rule callpeak:
         treatment=expand("results/star/{rip}/{rip}.star.bam",rip=rip_samples),
         control=expand("results/star/{input}/{input}.star.bam",input=input_samples),
     output:
-        multiext(f"callpeak/MACS2_{config['tag']}",
+        multiext(f"results/callpeak/MACS2_{config['tag']}",
                  "_peaks.xls",   ### required
                  ### optional output files
                  "_peaks.narrowPeak",
@@ -23,7 +23,7 @@ rule callpeak:
 
 rule homer_annotatepeaks:
     input:
-        peaks=f"callpeak/MACS2_{config['tag']}_summits.bed",
+        peaks=f"results/callpeak/MACS2_{config['tag']}_summits.bed",
         genome="resources/genome.fasta",
         # optional input files
         gtf="resources/genome.gtf", # implicitly sets the -gtf flag
@@ -41,27 +41,33 @@ rule homer_annotatepeaks:
         # cmp_Liftover="", # implicitly sets the -cmpLiftover flag
         # advanced_annotation=""  # optional, implicitly sets the -ann flag, see http://homer.ucsd.edu/homer/ngs/advancedAnnotation.html
     output:
-        annotations=f"callpeak/MACS2_{config['tag']}_peaks.narrowPeak_annot.txt",
+        annotations=f"results/callpeak/MACS2_{config['tag']}_peaks.narrowPeak_annot.txt",
         # optional output, implicitly sets the -matrix flag, requires motif_files as input
-        matrix=multiext(f"callpeak/MACS2_{config['tag']}_peaks.narrowPeak",
-                        ".count.matrix.txt",
-                        ".ratio.matrix.txt",
-                        ".logPvalue.matrix.txt",
-                        ".stats.txt"
-                        ),
+
         # optional output, implicitly sets the -mfasta flag, requires motif_files as input
-        mfasta=f"callpeak/MACS2_{config['tag']}_peaks_motif.fasta",
+        mfasta=f"results/callpeak/MACS2_{config['tag']}_peaks_motif.fasta",
         # # optional output, implicitly sets the -mbed flag, requires motif_files as input
-        mbed=f"callpeak/MACS2_{config['tag']}_peaks_motif.bed",
+        mbed=f"results/callpeak/MACS2_{config['tag']}_peaks_motif.bed",
         # # optional output, implicitly sets the -mlogic flag, requires motif_files as input
-        mlogic=f"callpeak/MACS2_{config['tag']}_peaks_motif.logic"
+        mlogic=f"results/callpeak/MACS2_{config['tag']}_peaks_motif.logic"
     threads: config['threads']['homer']
     benchmark:
         f"benchmarks/homer/callmotif_{config['tag']}.txt"
+    conda:
+        "../envs/homer.yaml"
     params:
+        matrix_prefix = f"callpeak/MACS2_{config['tag']}_peaks.narrowPeak",
         mode="", # add tss, tts or rna mode and options here, i.e. "tss mm8"
         extra="-gid"  # optional params, see http://homer.ucsd.edu/homer/ngs/annotation.html
     log:
         f"logs/annotatePeaks/homer_annotatepeaks_{config['tag']}.log"
-    wrapper:
-        "v2.13.0/bio/homer/annotatePeaks"
+    shell:
+        "annotatePeaks.pl {input.peaks} {input.genome} "
+        "-gtf {input.gtf} "
+        "-mfasta {output.mfasta} "
+        "-mbed {output.mbed} "
+        "-mlogic {output.mlogic} "
+        "-cpu {threads} "
+        "-matrix {params.matrix_prefix}"
+        ">{output.annotations} "
+        " 2>{log}"
