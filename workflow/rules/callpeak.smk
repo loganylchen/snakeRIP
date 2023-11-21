@@ -7,7 +7,9 @@ rule callpeak:
                  "_peaks.xls",   ### required
                  ### optional output files
                  "_peaks.narrowPeak",
-                 "_summits.bed"
+                 "_summits.bed",
+                 "_control_lambda.bdg",
+                 "_treat_pileup.bdg"
                  )
     benchmark:
         f"benchmarks/macs2/callpeak_{config['tag']}.txt"
