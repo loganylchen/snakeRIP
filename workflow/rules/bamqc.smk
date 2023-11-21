@@ -45,7 +45,7 @@ rule qualimap_bamqc:
     shell:
         "export JAVA_OPTS='{resources.javaopt}' && "
         "qualimap bamqc -bam {input.bam} "
-        "-gtf {params.reference_gtf} "
+        "-gff {params.reference_gtf} "
         "-outdir {params.output_dir} "
         "-outfile {params.output_file} "
         "-outformat PDF:HTML --java-mem-size={resources.mem}> {log}"
