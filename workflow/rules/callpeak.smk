@@ -23,7 +23,7 @@ rule callpeak:
 
 rule homer_annotatepeaks:
     input:
-        peaks=f"results/callpeak/MACS2_{config['tag']}_summits.bed",
+        peaks=f"results/callpeak/MACS2_{config['tag']}_peaks.narrowPeak",
         genome="resources/genome.fasta",
         # optional input files
         gtf="resources/genome.gtf", # implicitly sets the -gtf flag
