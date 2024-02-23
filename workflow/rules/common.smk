@@ -21,17 +21,28 @@ input_samples = samples.loc[samples['condition']=='input',:].index.to_list()
 
 
 
-
 def check_raw_data(raw_data_string:str):
-    fq1, fq2 = raw_data_string.split(',')
-    return fq1,fq2
+    if raw_data_string.endswith('.fq') or raw_data_string.endswith('.fq.gz') or raw_data_string.endswith('.fastq') or raw_data_string.endswith('.fastq.gz'):
+        fq1, fq2 = raw_data_string.split(',')
+        return 'fastq',fq1,fq2
+    elif raw_data_string.startswith('SRR'):
+        return 'sra',raw_data_string, None
+    else:
+        raise ValueError(f'{raw_data_string} is not a valide datatype')
+
 
 def get_fq(wildcards):
     raw_data = samples.loc[wildcards.sample].loc['raw_data']
-    data = check_raw_data(raw_data)
-    return {
-            'fq1':data[0],
-            'fq2':data[1]
+    data_type, *data = check_raw_data(raw_data)
+    if data_type == 'fastq':
+        return {
+                'fq1':data[0],
+                'fq2':data[1]
+        }
+    elif data_type == 'sra':
+        return {
+            'fq1': f"results/raw_fastq/{wildcards.sample}/{wildcards.sample}_1.fastq.gz",
+            'fq2': f"results/raw_fastq/{wildcards.sample}/{wildcards.sample}_2.fastq.gz"
         }
 
 
