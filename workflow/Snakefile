@@ -25,6 +25,7 @@ container: "docker://condaforge/mambaforge:22.11.1-4"
 # report: "report/workflow.rst"
 
 include: "rules/common.smk"
+include: "rules/fetchsra.smk"
 include: "rules/fastqc.smk"
 include: "rules/bamqc.smk"
 
