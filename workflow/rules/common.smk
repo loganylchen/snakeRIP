@@ -23,39 +23,44 @@ input_samples = samples.loc[samples['condition']=='input',:].index.to_list()
 
 def check_raw_data(raw_data_string:str):
     if raw_data_string.endswith('.fq') or raw_data_string.endswith('.fq.gz') or raw_data_string.endswith('.fastq') or raw_data_string.endswith('.fastq.gz'):
-        fq1, fq2 = raw_data_string.split(',')
-        return 'fastq',fq1,fq2
-    elif raw_data_string.startswith('SRR'):
-        return 'sra',raw_data_string, None
+        fqs = raw_data_string.split(',')
+        if len(fqs) == 1:
+            return fqs[0], ''
+        elif len(fqs) == 2:
+            return fqs[0],fqs[1]
+        else:
+            raise ValueError(f'{raw_data_string} has more than 2 files')
     else:
         raise ValueError(f'{raw_data_string} is not a valide datatype')
 
 
 def get_fq(wildcards):
     raw_data = samples.loc[wildcards.sample].loc['raw_data']
-    data_type, *data = check_raw_data(raw_data)
-    if data_type == 'fastq':
-        return {
-                'fq1':data[0],
-                'fq2':data[1]
+    fq1, fq2 = check_raw_data(raw_data)
+    return {'fq1':fq1, 'fq2':fq2}
+
+
+
+def get_clean_fq(wildcards):
+    raw_data = samples.loc[wildcards.sample].loc['raw_data']
+    fq1, fq2 = check_raw_data(raw_data)
+    if fq2 == '':
+        return {'fq1':f"results/clean_fastq/{wildcards.sample}/{wildcards.sample}_1.fastq.gz",
+           
         }
-    elif data_type == 'sra':
-        return {
-            'fq1': f"results/raw_fastq/{wildcards.sample}/{wildcards.sample}_1.fastq.gz",
-            'fq2': f"results/raw_fastq/{wildcards.sample}/{wildcards.sample}_2.fastq.gz"
-        }
-
-
-
-def get_clean_data(wildcards):
-    return {
-            'fq1': f"results/clean_fastq/{wildcards.sample}/{wildcards.sample}_1.fastq.gz",
-            'fq2': f"results/clean_fastq/{wildcards.sample}/{wildcards.sample}_2.fastq.gz",
-            'index':"resources/star_genome",
+    else:
+        return {'fq1':f"results/clean_fastq/{wildcards.sample}/{wildcards.sample}_1.fastq.gz",
+            'fq2':f"results/clean_fastq/{wildcards.sample}/{wildcards.sample}_2.fastq.gz",
         }
 
-def get_sra(wildcards):
-    return samples.loc[wildcards.sample].loc['raw_data']
+def get_fq_n(wildcards):
+    raw_data = samples.loc[wildcards.sample].loc['raw_data']
+    fq1, fq2 = check_raw_data(raw_data)
+    if fq2 == '':
+        return 1
+    else:
+        return 2
+
 
 def get_final_output():
     final_output = []

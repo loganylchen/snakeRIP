@@ -1,6 +1,6 @@
 rule get_genome:
     output:
-        "resources/genome.fasta",
+        "resources/raw_genome.fasta",
     log:
         "logs/ref/get-genome.log",
     params:
@@ -17,7 +17,7 @@ rule get_genome:
 
 rule get_annotation:
     output:
-        "resources/genome.gtf",
+        "resources/raw_genome.gtf",
     params:
         species=config["reference"]["species"],
         fmt="gtf",
@@ -31,6 +31,28 @@ rule get_annotation:
         "benchmarks/get_annotation.benchmark.txt"
     wrapper:
         "v1.21.4/bio/reference/ensembl-annotation"
+
+
+rule filtering_genome_and_annotation:
+    input:
+        fasta="resources/raw_genome.fasta",
+        gtf="resources/raw_genome.gtf",
+    output:
+        fasta="resources/genome.fasta",
+        gtf="resources/genome.gtf",
+    log:
+        "logs/ref/filtering_references.log",
+    params:
+        select_contigs=config["reference"]["select_contigs"],
+    container:
+        "docker://btrspg/biopython:1.85"
+    benchmark:
+        "benchmarks/filtering_references.benchmark.txt"
+    script:
+        "../scripts/reference_filtering.py"
+
+
+
 
 
 rule genome_faidx:

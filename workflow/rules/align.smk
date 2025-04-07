@@ -1,6 +1,7 @@
 rule align:
     input:
         unpack(get_clean_data),
+        index="resources/star_genome",
     output:
         aln="results/star/{sample}/{sample}.star.bam",
     log:
