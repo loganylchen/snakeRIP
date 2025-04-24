@@ -4,7 +4,7 @@ rule get_genome:
     log:
         "logs/ref/get-genome.log",
     container:
-        "docker://minidocks/lftp:4.8"
+        "docker://btrspg/lftp:latest"
     params:
         species=config["reference"]["species"],
         datatype="dna",

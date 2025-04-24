@@ -1,15 +1,18 @@
-#!/usr/bin/env bash
+#!/bin/bash
+set -x
+set -e
 
-# 获取Snakemake参数
-species=$(echo "${snakemake_params[species]}" | tr '[:upper:]' '[:lower:]')
-release=${snakemake_params[release]}
-build=${snakemake_params[build]}
-datatype=${snakemake_params[datatype]:-""}
-threads=${snakemake[threads]}
-output_file=${snakemake_output[0]}
-log=${snakemake_log[0]}
+exec > "${snakemake_log[0]}" 2>&1
 
-# 设置branch
+species="${snakemake_params[species]}"
+release="${snakemake_params[release]}"
+build="${snakemake_params[build]}"
+datatype="${snakemake_params[datatype]}"
+threads="${snakemake[threads]}"
+output_file="${snakemake_output[0]}"
+
+
+
 branch=""
 if [ "$release" -ge 81 ] && [ "$build" = "GRCh37" ]; then
     branch="grch37/"
@@ -17,21 +20,21 @@ elif [ -n "${snakemake_params[branch]}" ]; then
     branch="${snakemake_params[branch]}/"
 fi
 
-# 设置spec
+
 if [ "$release" -gt 75 ]; then
     spec="$build"
 else
     spec="${build}.${release}"
 fi
 
-# 检查是否需要解压
+
 if [[ "$output_file" == *.gz ]]; then
-    decompress=""
+    decompress="cat "
 else
-    decompress="| gzip -d"
+    decompress="gzip -dc"
 fi
 
-# 设置URL基础部分
+
 url="https://ftp.ensembl.org/pub"
 url_prefix="${url}/${branch}release-${release}/fasta/${species}/${datatype}/${species^}.${spec}"
 
@@ -40,7 +43,7 @@ tmpdir=$(mktemp -d -p ./)
 trap 'rm -rf "$tmpdir"' EXIT
 
 
-# 根据数据类型设置后缀
+
 declare -a suffixes
 if [ "$datatype" = "dna" ]; then
     suffixes=("dna.primary_assembly.fa.gz" "dna.toplevel.fa.gz")
@@ -53,7 +56,7 @@ elif [ "$datatype" = "ncrna" ]; then
 elif [ "$datatype" = "pep" ]; then
     suffixes=("pep.all.fa.gz")
 else
-    echo "错误：无效的数据类型，必须是 dna、cdna、cds、ncrna 或 pep 之一" >&2
+    echo "ERROR:  dna、cdna、cds、ncrna or pep " 
     exit 1
 fi
 
@@ -64,18 +67,18 @@ for suffix in "${suffixes[@]}"; do
     
     # 检查文件是否存在
     if curl --location --head "$url_https" 2>/dev/null | grep -q 'Content-Length'; then
-        (lftp -c "pget -n ${threads} ${url_https} -" $decompress >> "$output_file") 2>&1 | tee -a "$log"
+        lftp -c "pget -n ${threads} ${url_https} -o ${tmpdir}/${suffix}";
+        $decompress ${tmpdir}/${suffix} >> "$output_file"
         success=true
 
     elif curl --location --head "$url_ftp" 2>/dev/null | grep -q 'Content-Length'; then
-        (lftp -c "pget -n ${threads} ${url_ftp} -" $decompress >> "$output_file") 2>&1 | tee -a "$log"
+        lftp -c "pget -n ${threads} ${url_ftp} -o ${tmpdir}/${suffix} ";
+        $decompress ${tmpdir}/${suffix} >> "$output_file"
         success=true
     fi
 done
 
 if ! $success; then
-
-    echo "请检查以上URL是否当前可用（可能是临时服务器问题）。" >&2
-    echo "此外，请检查物种、构建版本和发布版本的组合是否实际提供。" >&2
+    echo "ERROR"
     exit 1
 fi
