@@ -2,20 +2,25 @@ $schema: "http://json-schema.org/draft-06/schema#"
 
 description: an entry in the sample sheet
 properties:
-  sample_name:
+  Sample_name:
     type: string
     description: sample name/identifier
-  condition:
+  Treatment:
     type: string
     description: sample condition that will be compared during differential expression analysis (e.g. a treatment, a tissue time, a disease)
-  raw_data:
+  Raw_data:
     type: string
-    description: raw fastq file path or SRA ID
-  tag:
+    description: raw fastq file path 
+  Sequence_type:
     type: string
-    description: tag in config
+    description: Sequence type
+  Condition:
+    type: string
+    description: Condition
+
 required:
-  - sample_name
-  - condition
-  - raw_data
-  - tag
+  - Sample_name
+  - Treatment
+  - Raw_data
+  - Sequence_type
+  

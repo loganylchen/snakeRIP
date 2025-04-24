@@ -9,7 +9,8 @@ min_version("6.4.1")
 
 
 wildcard_constraints:
-    sample="[a-zA-Z\d]+",
+    sample="[a-zA-Z0-9]+",
+    project="[a-zA-Z0-9]+",
 
 
 ##### setup report #####
@@ -25,13 +26,13 @@ container: "docker://condaforge/mambaforge:22.11.1-4"
 # report: "report/workflow.rst"
 
 include: "rules/common.smk"
-include: "rules/fetchsra.smk"
+# include: "rules/fetchsra.smk"
 include: "rules/fastqc.smk"
-include: "rules/bamqc.smk"
+# include: "rules/bamqc.smk"
 
-include: "rules/align.smk"
-include: "rules/ref.smk"
-include: "rules/callpeak.smk"
+# include: "rules/align.smk"
+# include: "rules/ref.smk"
+# include: "rules/callpeak.smk"
 
 
 ##### target rules #####

@@ -3,16 +3,18 @@ rule get_genome:
         "resources/raw_genome.fasta",
     log:
         "logs/ref/get-genome.log",
+    container:
+        "docker://minidocks/lftp:4.8"
     params:
         species=config["reference"]["species"],
         datatype="dna",
         build=config["reference"]["build"],
         release=config["reference"]["release"],
-    cache: True
     benchmark:
         "benchmarks/get_genome.benchmark.txt"
-    wrapper:
-        "v1.21.4/bio/reference/ensembl-sequence"
+    threads: config['threads']['lftp']
+    script:
+        "../scripts/get_ensembl_sequence.sh"
 
 
 rule get_annotation:
@@ -24,13 +26,15 @@ rule get_annotation:
         build=config["reference"]["build"],
         release=config["reference"]["release"],
         flavor="",
-    cache: True
+    container:
+        "docker://curlimages/curl:8.13.0"
+    threads: 1
     log:
         "logs/ref/get_annotation.log",
     benchmark:
         "benchmarks/get_annotation.benchmark.txt"
-    wrapper:
-        "v1.21.4/bio/reference/ensembl-annotation"
+    script:
+        "../scripts/get_ensembl_annotation.sh"
 
 
 rule filtering_genome_and_annotation:
@@ -43,9 +47,10 @@ rule filtering_genome_and_annotation:
     log:
         "logs/ref/filtering_references.log",
     params:
-        select_contigs=config["reference"]["select_contigs"],
+        contigs=config["reference"]["contigs"],
     container:
         "docker://btrspg/biopython:1.85"
+
     benchmark:
         "benchmarks/filtering_references.benchmark.txt"
     script:
@@ -55,50 +60,3 @@ rule filtering_genome_and_annotation:
 
 
 
-rule genome_faidx:
-    input:
-        "resources/genome.fasta",
-    output:
-        "resources/genome.fasta.fai",
-    log:
-        "logs/ref/genome-faidx.log",
-    cache: True
-    wrapper:
-        "v1.21.4/bio/samtools/faidx"
-
-rule create_dict:
-    input:
-        "resources/genome.fasta",
-    output:
-        "resources/genome.dict",
-    log:
-        "logs/picard/create_dict.log",
-    params:
-        extra="",  # optional: extra arguments for picard.
-    # optional specification of memory usage of the JVM that snakemake will respect with global
-    # resource restrictions (https://snakemake.readthedocs.io/en/latest/snakefiles/rules.html#resources)
-    # and which can be used to request RAM during cluster job submission as `{resources.mem_mb}`:
-    # https://snakemake.readthedocs.io/en/latest/executing/cluster.html#job-properties
-    resources:
-        mem_mb=10240,
-    wrapper:
-        "v2.3.1/bio/picard/createsequencedictionary"
-
-
-
-rule star_index:
-    input:
-        fasta='resources/genome.fasta',
-        gtf='resources/genome.gtf'
-    output:
-        directory("resources/star_genome")
-    threads: config['threads']['star']
-    params:
-        sjdb_overhang=100,
-        extra="",
-    log:
-        "logs/star_index_genome.log",
-    benchmark:
-        "benchmarks/star_index.benchmark.txt"
-    wrapper:
-        "v1.21.4/bio/star/index"

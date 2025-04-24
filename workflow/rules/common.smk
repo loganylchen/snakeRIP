@@ -4,21 +4,16 @@ from snakemake.utils import validate
 
 validate(config, schema="../schemas/config.schema.yaml")
 
+project = config['project']
+
 samples = (
-    pd.read_csv(config["samples"], sep="\t", dtype={"sample_name": str})
-    .set_index("sample_name", drop=False)
+    pd.read_csv(config["samples"], sep="\t", dtype={"Sample_name": str})
+    .loc[lambda x: x["Project"] == project]
+    .set_index("Sample_name", drop=False)
     .sort_index()
 )
 
-samples = samples.loc[samples['tag']==config['tag'],:]
-
 validate(samples, schema="../schemas/samples.schema.yaml")
-
-
-
-rip_samples = samples.loc[samples['condition']=='RIP',:].index.to_list()
-input_samples = samples.loc[samples['condition']=='input',:].index.to_list()
-
 
 
 def check_raw_data(raw_data_string:str):
@@ -35,26 +30,29 @@ def check_raw_data(raw_data_string:str):
 
 
 def get_fq(wildcards):
-    raw_data = samples.loc[wildcards.sample].loc['raw_data']
+    raw_data = samples.loc[wildcards.sample].loc['Raw_data']
     fq1, fq2 = check_raw_data(raw_data)
-    return {'fq1':fq1, 'fq2':fq2}
+    if fq2 == '':
+        return {'fq1':fq1}
+    else:
+        return {'fq1':fq1, 'fq2':fq2}
 
 
 
 def get_clean_fq(wildcards):
-    raw_data = samples.loc[wildcards.sample].loc['raw_data']
+    raw_data = samples.loc[wildcards.sample].loc['Raw_data']
     fq1, fq2 = check_raw_data(raw_data)
     if fq2 == '':
-        return {'fq1':f"results/clean_fastq/{wildcards.sample}/{wildcards.sample}_1.fastq.gz",
+        return {'fq1':f"{wildcards.project}/clean_data/{wildcards.sample}/{wildcards.sample}_1.fastq.gz",
            
         }
     else:
-        return {'fq1':f"results/clean_fastq/{wildcards.sample}/{wildcards.sample}_1.fastq.gz",
-            'fq2':f"results/clean_fastq/{wildcards.sample}/{wildcards.sample}_2.fastq.gz",
+        return {'fq1':f"{wildcards.project}/clean_data/{wildcards.sample}/{wildcards.sample}_1.fastq.gz",
+            'fq2':f"{wildcards.project}/clean_data/{wildcards.sample}/{wildcards.sample}_2.fastq.gz",
         }
 
 def get_fq_n(wildcards):
-    raw_data = samples.loc[wildcards.sample].loc['raw_data']
+    raw_data = samples.loc[wildcards.sample].loc['Raw_data']
     fq1, fq2 = check_raw_data(raw_data)
     if fq2 == '':
         return 1
@@ -63,9 +61,8 @@ def get_fq_n(wildcards):
 
 
 def get_final_output():
-    final_output = []
-    final_output += expand("results/qc/{sample}/{sample}_rnaseq.pdf",sample=samples.index.to_list())
-    final_output += expand("results/qc/{sample}/{sample}_bamqc.pdf",sample=samples.index.to_list())
-    final_output.append(f"results/callpeak/MACS2_{config['tag']}_peaks.xls")
-    final_output.append(f"results/callpeak/MACS2_{config['tag']}_peaks_motif.fasta")
+    final_output = ["resources/genome.fasta"]
+    for sample in samples.index:
+        if samples.loc[sample].loc['Sequence_type'] == 'm5C-BS-seq':
+            final_output.append(f"{project}/clean_data/{sample}/{sample}_1.fastq.gz")
     return final_output

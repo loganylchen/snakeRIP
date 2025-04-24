@@ -1,14 +1,14 @@
-rule fastp_fastqc_pe:
+rule qc_fastp:
     input:
-        unpack(get_fq)
+        unpack(get_fq),
     output:
-        unpack(get_clean_fq),
-        qc_html="results/qc/{sample}/{sample}.fastp.html",
-        qc_json="results/qc/{sample}/{sample}.fastp.json",
+        reads = ["{project}/clean_data/{sample}/{sample}_1.fastq.gz"] if get_fq_n == 1 else ["{project}/clean_data/{sample}/{sample}_1.fastq.gz", "{project}/clean_data/{sample}/{sample}_2.fastq.gz"],
+        qc_html="{project}/qc/{sample}/{sample}.fastp.html",
+        qc_json="{project}/qc/{sample}/{sample}.fastp.json",
     log:
-        "logs/clean_data/{sample}.log"
+        "logs/{project}/clean_data/{sample}.log"
     benchmark:
-        "benchmarks/{sample}.fastp_qc.benchmark.txt"
+        "benchmarks/qc/fastp/{project}_{sample}.benchmark.txt"
     params:
         extra=config['params']["fastp"],
         fq_n=get_fq_n,
@@ -17,5 +17,5 @@ rule fastp_fastqc_pe:
     threads:
         config['threads']["fastp"]
     script:
-        "../scripts/fastp_clean_data.bash"
+        "../scripts/fastp_clean_data.sh"
 
