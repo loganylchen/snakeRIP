@@ -13,7 +13,7 @@ rule build_genome_index:
     benchmark:
         "benchmarks/rnam5c_build_genome_index.benchmark.txt"
     shell:
-        "python /opt/conda/RNA-m5c/0_m5C_step-by-step_metadata/BS_hisat2_index.py "
+        "python /opt/conda/RNA-m5C/0_m5C_step-by-step_metadata/BS_hisat2_index.py "
         "-i {input.fasta} "
         "--gtf {input.gtf} "
         "--hisat2-path /opt/conda/bin/hisat2-build "
@@ -36,12 +36,12 @@ rule build_transcriptome_index:
     benchmark:
         "benchmarks/rnam5c_build_transcriptome_index.benchmark.txt"
     shell:
-        "python /opt/conda/RNA-m5c/0_m5C_step-by-step_metadata/fasta_c2t.py "
+        "python /opt/conda/RNA-m5C/0_m5C_step-by-step_metadata/fasta_c2t.py "
         "-i {input.fasta} "
         "> {output.c2t_fa} 2>{log} && "
         "bowtie2-build "
         "{output.c2t_fa} "
-        "{params.prefix} 2>>{log}"
+        "{params.prefix} 2>>{log} 1>> {log}"
 
 rule get_metadata:
     input:
@@ -63,16 +63,16 @@ rule get_metadata:
     benchmark:
         "benchmarks/rnam5c_get_metadata.benchmark.txt"
     shell:
-        "python /opt/conda/RNA-m5c/0_m5C_step-by-step_metadata/gtf2anno.py "
+        "python /opt/conda/RNA-m5C/0_m5C_step-by-step_metadata/gtf2anno.py "
         "-i {input.gtf} > {output.anno} && "
-        "python /opt/conda/RNA-m5c/0_m5C_step-by-step_metadata/gtf2genelist.py "
+        "python /opt/conda/RNA-m5C/0_m5C_step-by-step_metadata/gtf2genelist.py "
         "-i {input.gtf} "
         "-f {input.transcriptome_fasta} > {output.genelist} && "
-        "python /opt/conda/RNA-m5c/0_m5C_step-by-step_metadata/ref_sizes.py "
+        "python /opt/conda/RNA-m5C/0_m5C_step-by-step_metadata/ref_sizes.py "
         "-i {input.genome_fasta} -o {output.genomesize} &&"
-        "python /opt/conda/RNA-m5c/0_m5C_step-by-step_metadata/anno_to_base.py "
+        "python /opt/conda/RNA-m5C/0_m5C_step-by-step_metadata/anno_to_base.py "
         "-i {output.anno} > {output.base} && "
-        "python /opt/conda/RNA-m5c/0_m5C_step-by-step_metadata/anno_to_base_remove_redundance_v1.0.py "
+        "python /opt/conda/RNA-m5C/0_m5C_step-by-step_metadata/anno_to_base_remove_redundance_v1.0.py "
         "-i {output.base} "
         "-o {output.nd_base} "
         "-g {output.genelist} 2>{log}"
