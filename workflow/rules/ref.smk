@@ -27,7 +27,7 @@ rule get_annotation:
         release=config["reference"]["release"],
         flavor="",
     container:
-        "docker://curlimages/curl:8.13.0"
+        "docker://btrspg/lftp:latest"
     threads: 1
     log:
         "logs/ref/get_annotation.log",
