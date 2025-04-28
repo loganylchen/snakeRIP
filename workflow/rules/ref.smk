@@ -22,7 +22,7 @@ rule extract_transcripts:
         fasta="resources/genome.fasta",
         gtf="resources/genome.gtf"
     output:
-        transcripts="resources/transcriptome.fa"
+        transcripts="resources/transcriptome.fasta"
     log:
         "logs/ref/get_transcripts.log"
     container:
