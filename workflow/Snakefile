@@ -28,6 +28,7 @@ container: "docker://condaforge/mambaforge:22.11.1-4"
 include: "rules/common.smk"
 # include: "rules/fetchsra.smk"
 include: "rules/fastqc.smk"
+include: "rules/rnam5c/build_index.smk"
 # include: "rules/bamqc.smk"
 
 # include: "rules/align.smk"

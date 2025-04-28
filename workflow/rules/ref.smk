@@ -17,6 +17,21 @@ rule get_genome:
         "../scripts/get_ensembl_sequence.sh"
 
 
+rule extract_transcripts:
+    input:
+        fasta="resources/genome.fasta",
+        gtf="resources/genome.gtf"
+    output:
+        transcripts="resources/transcriptome.fa"
+    log:
+        "logs/ref/get_transcripts.log"
+    container:
+        "docker://btrspg/gffread:0.12.7"
+    benchmark:
+        "benchmarks/extract_transcripts.benchmark.txt"
+    shell:
+        "gffread -w {output.transcripts} -g {input.fasta} {input.gtf} 2> {log}"
+
 rule get_annotation:
     output:
         "resources/raw_genome.gtf",
