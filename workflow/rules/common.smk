@@ -61,8 +61,10 @@ def get_fq_n(wildcards):
 
 
 def get_final_output():
-    final_output = ["resources/genome.fasta","resources/genelist.txt","resources/rnam5c_hisat2_genome_index"]
+    final_output = [
+        # "resources/genome.fasta","resources/genelist.txt","resources/rnam5c_hisat2_genome_index"
+        ]
     for sample in samples.index:
         if samples.loc[sample].loc['Sequence_type'] == 'm5C-BS-seq':
-            final_output.append(f"{project}/clean_data/{sample}/{sample}_1.fastq.gz")
+            final_output.append(f"{project}/m5C/{sample}/{sample}.bam")
     return final_output
