@@ -9,7 +9,7 @@ rule build_genome_index:
     log:
         "logs/rnam5c/build_genome_index.log",
     container:
-        "docker://btrspg/rnam5c:913a09dee6d2d414e9ca0d63c84755c12f943a82"
+        "docker://btrspg/rnam5c:409be6485bcdd160f6c57e386ef71ff3ecb8e2f6"
     benchmark:
         "benchmarks/rnam5c_build_genome_index.benchmark.txt"
     threads: config['threads']['rnam5c_build_genome_index']
@@ -33,7 +33,7 @@ rule build_transcriptome_index:
     log:
         "logs/rnam5c/build_transcriptome_index.log",
     container:
-        "docker://btrspg/rnam5c:913a09dee6d2d414e9ca0d63c84755c12f943a82"
+        "docker://btrspg/rnam5c:409be6485bcdd160f6c57e386ef71ff3ecb8e2f6"
     benchmark:
         "benchmarks/rnam5c_build_transcriptome_index.benchmark.txt"
     shell:
@@ -60,7 +60,7 @@ rule get_metadata:
     log:
         "logs/rnam5c/get_metadata.log",
     container:
-        "docker://btrspg/rnam5c:913a09dee6d2d414e9ca0d63c84755c12f943a82"
+        "docker://btrspg/rnam5c:409be6485bcdd160f6c57e386ef71ff3ecb8e2f6"
     benchmark:
         "benchmarks/rnam5c_get_metadata.benchmark.txt"
     shell:
