@@ -8,6 +8,7 @@ threads:
   homer: 12
   lftp: 12
   rnam5c_build_genome_index: 12
+  m5C_align: 12
 
 reference:
   # Ensembl species name

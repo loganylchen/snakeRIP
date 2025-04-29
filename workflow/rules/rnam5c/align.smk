@@ -1,11 +1,13 @@
 rule align_m5C:
     input:
-        unpack(get_clean_data),
+        unpack(get_clean_fq),
         index="resources/rnam5c_hisat2_genome_index",
     output:
         mapping_result="{project}/m5C/{sample}/{sample}.bam",
         multimapping_result="{project}/m5C/{sample}/{sample}.multimapping.bam",
         config=temp("{project}/m5C/{sample}/{sample}.config"),
+        tmp_fq1=temp("{project}/m5C/{sample}/{sample}_R1.fastq"),
+        tmp_fq2=temp("{project}/m5C/{sample}/{sample}_R2.fastq"),
     log:
         "logs/{project}/align_m5C/{sample}.log",
     benchmark:
@@ -17,9 +19,11 @@ rule align_m5C:
     threads: config["threads"]["m5C_align"]
     shell:
         "echo '-p {threads}' > {output.config} &&"
+        "gzip -dc {input.fq1} > {output.tmp_fq1} && "
+        "gzip -dc {input.fq2} > {output.tmp_fq2} && "
         "python /opt/conda/RNA-m5C/2_m5C_step-by-step_hisat2/BS_hisat2.py "
-        "-F {input.fq1} "
-        "-R {input.fq2} "
+        "-F {output.tmp_fq1} "
+        "-R {output.tmp_fq2} "
         "--del-convert "
         "--del-sam "
         "--hisat2-path /opt/conda/bin "
