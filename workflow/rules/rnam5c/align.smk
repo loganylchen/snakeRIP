@@ -4,7 +4,7 @@ rule align_m5C:
         index="resources/rnam5c_hisat2_genome_index",
     output:
         mapping_result="{project}/m5C/{sample}/{sample}.bam",
-        # multimapping_result="{project}/m5C/{sample}/{sample}.multimapping.bam",
+        multimapping_result="{project}/m5C/{sample}/{sample}.multimappers.bam",
         config=temp("{project}/m5C/{sample}/{sample}.config"),
         tmp_fq1=temp("{project}/m5C/{sample}/{sample}_R1.fastq"),
         tmp_fq2=temp("{project}/m5C/{sample}/{sample}_R2.fastq"),
