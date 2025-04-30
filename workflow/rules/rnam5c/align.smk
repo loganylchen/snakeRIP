@@ -29,5 +29,6 @@ rule align_m5C:
         "--hisat2-path /opt/conda/bin "
         "-I {input.index} "
         "-o {params.prefix} "
+        "--continue-prefix {params.prefix}_tmp "
         "--index-prefix HISAT2 " 
         "--hisat2-param {output.config} 2>{log}"
