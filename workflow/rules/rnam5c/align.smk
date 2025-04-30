@@ -6,8 +6,8 @@ rule align_m5C:
         mapping_result="{project}/m5C/{sample}/{sample}.bam",
         multimapping_result="{project}/m5C/{sample}/{sample}.multimappers.bam",
         config=temp("{project}/m5C/{sample}/{sample}.config"),
-        tmp_fq1=temp("{project}/m5C/{sample}/{sample}_R1.fastq"),
-        tmp_fq2=temp("{project}/m5C/{sample}/{sample}_R2.fastq"),
+        tmp_rev=temp("{project}/m5C/{sample}/{sample}_rev.fastq"),
+        tmp_forward=temp("{project}/m5C/{sample}/{sample}_R2.fastq"),
     log:
         "logs/{project}/align_m5C/{sample}.log",
     benchmark:
@@ -19,11 +19,11 @@ rule align_m5C:
     threads: config["threads"]["m5C_align"]
     shell:
         "echo '-p {threads}' > {output.config} &&"
-        "gzip -dc {input.fq1} > {output.tmp_fq1} && "
-        "gzip -dc {input.fq2} > {output.tmp_fq2} && "
+        "gzip -dc {input.fq1} > {output.tmp_rev} && "
+        "gzip -dc {input.fq2} > {output.tmp_forward} && "
         "python /opt/conda/RNA-m5C/2_m5C_step-by-step_hisat2/BS_hisat2.py "
-        "-F {output.tmp_fq1} "
-        "-R {output.tmp_fq2} "
+        "-F {output.tmp_forward} "
+        "-R {output.tmp_rev} "
         "--del-convert "
         "--del-sam "
         "--hisat2-path /opt/conda/bin "
