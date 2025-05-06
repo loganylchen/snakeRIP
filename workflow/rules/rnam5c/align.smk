@@ -57,7 +57,7 @@ rule align_m5C_transcriptome:
     threads: config["threads"]["m5C_align"]
     shell:
         "echo '-p {threads}' > {output.config} &&"
-        "python /opt/conda/RNA-m5C/2_m5C_step-by-step_hisat2/BS_bowtie2.py "
+        "python /opt/conda/RNA-m5C/3_m5C_step-by-step_bowtie2/BS_bowtie2.py "
         "-F {input.tmp_forward} "
         "-R {intput.tmp_rev} "
         "--del-convert "
@@ -68,7 +68,7 @@ rule align_m5C_transcriptome:
         "-o {params.prefix} "
         "--continue-prefix {params.prefix}_tmp "
         "--bowtie2-param {output.config} 2>{log} && "
-        "python /opt/conda/RNA-m5C/2_m5C_step-by-step_hisat2/Bam_transcriptome_to_genome_v1.0.py "
+        "python /opt/conda/RNA-m5C/3_m5C_step-by-step_bowtie2/Bam_transcriptome_to_genome_v1.0.py "
         "-i {output.mapping_result} "
         "-o {output.coverted_mapping_result} "
         "-a {input.anno} "
@@ -89,7 +89,7 @@ rule merge_bams:
     threads:
         config["threads"]["m5C_align"]
     shell:
-        "python /opt/conda/RNA-m5C/2_m5C_step-by-step_hisat2/concat_bam.py "
+        "python /opt/conda/RNA-m5C/4_m5C_step-by-step_pileup/concat_bam.py "
         "-t {threads} "
         "-i {input.genome_bam} {input.transcriptome_bam} "
         "-o {output.merged_bam} "
