@@ -31,6 +31,7 @@ include: "rules/fastqc.smk"
 include: "rules/rnam5c/build_index.smk"
 include: "rules/rnam5c/prep.smk"
 include: "rules/rnam5c/align.smk"
+include: "rules/rnam5c/calling.smk"
 # include: "rules/bamqc.smk"
 
 # include: "rules/align.smk"

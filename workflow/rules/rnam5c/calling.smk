@@ -4,7 +4,7 @@ rule m5c_calling:
         merged_bam="{project}/m5C/{sample}/{sample}.merged.bam",
         noredundance_base="resources/genome.nd_base",
     output:
-        m5c_pileup_tmp=="{project}/m5C/{sample}/{sample}.pileup.tmp",
+        m5c_pileup_tmp="{project}/m5C/{sample}/{sample}.pileup.tmp",
         m5c_calling_result="{project}/m5C/{sample}/{sample}.m5c.3.txt",
     log:
         "logs/{project}/m5c_calling/{sample}.log",
