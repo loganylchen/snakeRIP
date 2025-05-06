@@ -59,7 +59,7 @@ rule align_m5C_transcriptome:
         "echo '-p {threads}' > {output.config} &&"
         "python /opt/conda/RNA-m5C/3_m5C_step-by-step_bowtie2/BS_bowtie2.py "
         "-F {input.tmp_forward} "
-        "-R {intput.tmp_rev} "
+        "-R {input.tmp_rev} "
         "--del-convert "
         "--del-sam "
         "--bowtie2-path /opt/conda/bin "
