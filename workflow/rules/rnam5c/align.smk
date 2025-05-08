@@ -78,11 +78,13 @@ rule merge_bams:
         genome_bam="{project}/m5C/{sample}/{sample}_genome.bam",
         transcriptome_bam="{project}/m5C/{sample}/{sample}_transcriptome.converted.bam",
     output:
-        merged_bam="{project}/m5C/{sample}/{sample}.merged.bam",
+        out_bam=merged_bam="{project}/m5C/{sample}/{sample}.merged.sorted.bam",
     log:
         "logs/{project}/merge_bams/{sample}.log",
     benchmark:
         "benchmarks/merge_bams/m5C/{project}_{sample}.benchmark.txt"
+    params:
+        merged_bam="{project}/m5C/{sample}/{sample}.merged.bam",
     container:
         "docker://btrspg/rnam5c:4c6656b36e5f88116a5a2df8c23897891cc887f5"
     threads:
@@ -91,6 +93,6 @@ rule merge_bams:
         "python /opt/conda/RNA-m5C/4_m5C_step-by-step_pileup/concat_bam.py "
         "-t {threads} "
         "-i {input.genome_bam} {input.transcriptome_bam} "
-        "-o {output.merged_bam} "
+        "-o {params.merged_bam} "
         "--sort --index  2>{log}"
 
