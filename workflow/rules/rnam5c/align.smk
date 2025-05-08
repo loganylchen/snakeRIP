@@ -78,7 +78,7 @@ rule merge_bams:
         genome_bam="{project}/m5C/{sample}/{sample}_genome.bam",
         transcriptome_bam="{project}/m5C/{sample}/{sample}_transcriptome.converted.bam",
     output:
-        out_bam=merged_bam="{project}/m5C/{sample}/{sample}.merged.sorted.bam",
+        out_bam="{project}/m5C/{sample}/{sample}.merged.sorted.bam",
     log:
         "logs/{project}/merge_bams/{sample}.log",
     benchmark:
