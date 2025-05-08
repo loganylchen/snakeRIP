@@ -1,7 +1,7 @@
 rule m5c_calling:
     input:
         genome_reference="resources/genome.fasta",
-        merged_bam="{project}/m5C/{sample}/{sample}.merged.bam",
+        merged_bam="{project}/m5C/{sample}/{sample}.merged.sorted.bam",
         noredundance_base="resources/genome.nd_base",
     output:
         m5c_pileup_tmp="{project}/m5C/{sample}/{sample}.pileup.tmp",
