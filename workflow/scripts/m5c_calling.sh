@@ -18,7 +18,7 @@ python /opt/conda/RNA-m5C/4_m5C_step-by-step_pileup/pileup_genome_multiprocessin
         -f ${genome_reference} \
         -i ${merged_bam} \
         -o ${m5c_pileup_tmp} 
-
+mkdir -p ${m5c_pileup_tmp}.sort_tmp
 sort -k 3,3 -k 1,2 -S 5G --parallel ${threads} -T ${m5c_pileup_tmp}.sort_tmp ${m5c_pileup_tmp} > ${m5c_pileup_tmp}.merged.sorted
 
 python /opt/conda/RNA-m5C/4_m5C_step-by-step_pileup/m5C_pileup_formatter.py \
@@ -32,4 +32,5 @@ python /opt/conda/RNA-m5C/5_m5C_step-by_step-call_site/m5C_caller.py \
     -o ${output_file_prefix} \
     --CR overall --method binomial 
 
+rm -rf ${m5c_pileup_tmp}.sort_tmp
 #${output_file_prefix}.3.txt  ${output_file_prefix}.None.txt 
