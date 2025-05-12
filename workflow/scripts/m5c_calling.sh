@@ -10,7 +10,7 @@ merged_bam="${snakemake_input[merged_bam]}"
 m5c_pileup_tmp="${snakemake_output[m5c_pileup_tmp]}"
 noredundance_base="${snakemake_input[noredundance_base]}"
 output_file_prefix="${snakemake_params[output_file_prefix]}"
-threads="${snakemake_threads}"
+threads="${snakemake[threads]}"
 
 python /opt/conda/RNA-m5C/4_m5C_step-by-step_pileup/pileup_genome_multiprocessing_v1.4.py \
         -P ${threads} \
