@@ -1,9 +1,10 @@
 #!/bin/bash
-set -x
-set -e
+
 
 exec > "${snakemake_log[0]}" 2>&1
 
+set -x
+set -e
 
 genome_reference="${snakemake_input[genome_reference]}"
 merged_bam="${snakemake_input[merged_bam]}"
