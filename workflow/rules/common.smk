@@ -13,6 +13,8 @@ samples = (
     .sort_index()
 )
 
+print(samples.index)
+
 validate(samples, schema="../schemas/samples.schema.yaml")
 
 
