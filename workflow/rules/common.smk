@@ -70,7 +70,8 @@ def get_final_output():
         print(sample)
         print(f'|_{sample}_|')
         if samples.loc[sample].loc['Sequence_type'] == 'm5C-BS-seq':
-           
+            print(f"{project}/m5C/{sample}/{sample}.m5c.3.txt")
+            print(f"""|{sample}|{project}|""")
             final_output.append(f"{project}/m5C/{sample}/{sample}.m5c.3.txt")
             
     return final_output
