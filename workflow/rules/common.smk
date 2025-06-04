@@ -67,6 +67,7 @@ def get_final_output():
         # "resources/genome.fasta","resources/genelist.txt","resources/rnam5c_hisat2_genome_index"
         ]
     for sample in samples.index:
+        print(sample)
         print(f'|_{sample}_|')
         if samples.loc[sample].loc['Sequence_type'] == 'm5C-BS-seq':
            
