@@ -13,7 +13,7 @@ samples = (
     .sort_index()
 )
 
-print(samples.index)
+
 
 validate(samples, schema="../schemas/samples.schema.yaml")
 
@@ -67,8 +67,9 @@ def get_final_output():
         # "resources/genome.fasta","resources/genelist.txt","resources/rnam5c_hisat2_genome_index"
         ]
     for sample in samples.index:
+        print(f'|{sample}|')
         if samples.loc[sample].loc['Sequence_type'] == 'm5C-BS-seq':
-            print(f'|{sample}|')
+           
             final_output.append(f"{project}/m5C/{sample}/{sample}.m5c.3.txt")
             
     return final_output
